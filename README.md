@@ -12,13 +12,23 @@ brew tap DirkFust/tap
 HOMEBREW_CASK_OPTS="--no-quarantine" brew install --cask summon
 ```
 
-Put `export HOMEBREW_CASK_OPTS="--no-quarantine"` in your shell profile so it
-applies to upgrades too.
+Keep the variable as a prefix on the command. Do **not** export it from your
+shell profile: it applies to every cask you install, including third-party apps
+from homebrew-cask, and would disable Gatekeeper's quarantine for all of them.
+Homebrew 6 dropped the per-command `--no-quarantine` flag, so the scoped prefix
+is the only way to limit it to one install.
 
 ## Upgrade
 
 ```sh
-brew upgrade --cask summon
+HOMEBREW_CASK_OPTS="--no-quarantine" brew upgrade --cask summon
+```
+
+A plain `brew upgrade` re-quarantines these apps, because the prefix is missing.
+If that happens, strip it by hand:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Summon.app
 ```
 
 ## Why `--no-quarantine`
