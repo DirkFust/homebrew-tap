@@ -1,6 +1,6 @@
 cask "summon" do
-  version "1.4.2"
-  sha256 "24351bc00a72ba86e145a06763a3c4f6d44111806fe1f977d0c41e21e4649317"
+  version "1.4.3"
+  sha256 "0cb304a27f473f7c34c90c2d267445c0ad4abba3cfeec62b37d2df7ffa489eb8"
 
   url "https://github.com/DirkFust/homebrew-tap/releases/download/summon-v#{version}/Summon-#{version}.zip"
   name "Summon"
