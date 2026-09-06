@@ -1,6 +1,6 @@
 cask "dft" do
-  version "0.8.0"
-  sha256 "7a6224490f939bb581a4a0d62e2b8ba9ed437c851b45c13e5453cbb521d6b616"
+  version "0.8.1"
+  sha256 "5b1869d7cda01ce8e25ad674b4205bf02849d80dd3cfb645f6f62a2d81422f09"
 
   url "https://github.com/DirkFust/homebrew-tap/releases/download/dft-v#{version}/DFT-#{version}.zip"
   name "DFT"
@@ -18,21 +18,24 @@ cask "dft" do
   # decides which one runs.
   binary "#{appdir}/DFT.app/Contents/MacOS/dft"
 
-  postflight do
+  # A steps block, not the deprecated `postflight do`: Homebrew 6 warns on the
+  # legacy flight blocks and only the declarative step DSL stays quiet. Paths
+  # reach the steps through the `{{appdir}}` template token — `#{appdir}` is a
+  # cask-DSL method the steps DSL deliberately does not expose.
+  postflight_steps do
     # Cask quarantines everything it installs, and Gatekeeper refuses a
     # non-notarized bundle carrying that attribute. Strip it for this app only.
     # The alternative, HOMEBREW_CASK_OPTS="--no-quarantine", is the one knob
     # Homebrew 6 still offers and it is global — it would disable quarantine for
     # every other cask too. `xattr -dr` exits 0 whether or not the attribute is
     # present, so this needs no failure handling.
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/DFT.app"]
+    run "/usr/bin/xattr",
+        args: ["-dr", "com.apple.quarantine", "{{appdir}}/DFT.app"]
     # Launch Services scans /Applications on its own schedule; registering by
     # hand makes the dft:// scheme and the "Diff with DFT"
     # Finder service work immediately after the install rather than eventually.
-    lsregister = "/System/Library/Frameworks/CoreServices.framework/Frameworks/" \
-                 "LaunchServices.framework/Support/lsregister"
-    system_command lsregister, args: ["-f", "#{appdir}/DFT.app"]
+    run "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister",
+        args: ["-f", "{{appdir}}/DFT.app"]
   end
 
   uninstall quit: "cloud.fust.dft"
