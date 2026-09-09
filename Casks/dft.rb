@@ -34,8 +34,16 @@ cask "dft" do
     # Launch Services scans /Applications on its own schedule; registering by
     # hand makes the dft:// scheme and the "Diff with DFT"
     # Finder service work immediately after the install rather than eventually.
+    #
+    # `must_succeed: false` because this is a convenience, not a precondition:
+    # `lsregister -f` exits 1 when its Spotlight side-scan of a bundle that
+    # appeared moments ago returns -10822 ("failed to scan ...: -10822 from
+    # spotlight") — the Launch Services registration itself still went through.
+    # As a fatal step it aborted the install *and* the rollback that follows it,
+    # leaving the machine with no DFT.app at all.
     run "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister",
-        args: ["-f", "{{appdir}}/DFT.app"]
+        args: ["-f", "{{appdir}}/DFT.app"],
+        must_succeed: false
   end
 
   uninstall quit: "cloud.fust.dft"
