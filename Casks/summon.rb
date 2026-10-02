@@ -16,10 +16,11 @@ cask "summon" do
   # The alternative, HOMEBREW_CASK_OPTS="--no-quarantine", is the one knob
   # Homebrew 6 still offers and it is global — it would disable quarantine for
   # every other cask too. `xattr -dr` exits 0 whether or not the attribute is
-  # present, so this needs no failure handling.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Summon.app"]
+  # present, so this needs no failure handling. Declarative steps, because
+  # Homebrew 7 deprecates the Ruby `postflight` block; `{{appdir}}` is
+  # expanded by Homebrew at install time.
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Summon.app"]
   end
 
   uninstall quit: "com.dirk.summon"
