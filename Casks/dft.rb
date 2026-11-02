@@ -1,6 +1,6 @@
 cask "dft" do
-  version "1.2.1"
-  sha256 "d1cc22f6f804614c593799973ca78668eb03473de8b76a84b7b917db745acb23"
+  version "1.3.0"
+  sha256 "7a5f07871eb0e482ee1719a4bfd68a6240160a01889c5ca9a36cdd0517474137"
 
   url "https://github.com/DirkFust/homebrew-tap/releases/download/dft-v#{version}/DFT-#{version}.zip"
   name "DFT"
