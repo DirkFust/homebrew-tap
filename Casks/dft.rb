@@ -1,10 +1,11 @@
 cask "dft" do
-  version "1.3.6"
-  sha256 "4aac50224e9a9813e61cb875e6277c550e8d6762cae64ded694e0c3489c82ddf"
+  version "1.3.7"
+  sha256 "538036a028698312ca9486f50e04238706ad34648e6521128f1326ad5e0f9c87"
 
   url "https://github.com/DirkFust/homebrew-tap/releases/download/dft-v#{version}/DFT-#{version}.zip"
   name "DFT"
-  desc "Native macOS diff tool with a CLI and a GUI in one binary"
+  # No platform in the desc: `brew style` rejects it (Cask/Desc) — casks are macOS-only anyway.
+  desc "Native diff tool with a CLI and a GUI in one binary"
   homepage "https://github.com/DirkFust/homebrew-tap"
 
   # A bare symbol already means "this version or newer"; the string form
@@ -42,7 +43,7 @@ cask "dft" do
     # As a fatal step it aborted the install *and* the rollback that follows it,
     # leaving the machine with no DFT.app at all.
     run "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister",
-        args: ["-f", "{{appdir}}/DFT.app"],
+        args:         ["-f", "{{appdir}}/DFT.app"],
         must_succeed: false
   end
 
